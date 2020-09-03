@@ -14,11 +14,11 @@ RUN apt-get -yy install  sudo apt-utils software-properties-common $BUILD_DEPS
 
 
 # Build pulseaudio
-WORKDIR /tmp
-RUN apt-get source pulseaudio
-RUN apt-get build-dep -yy pulseaudio
-WORKDIR /tmp/pulseaudio-11.1
-RUN dpkg-buildpackage -uc -b
+#WORKDIR /tmp
+#RUN apt-get source pulseaudio
+#RUN apt-get build-dep -yy pulseaudio
+#WORKDIR /tmp/pulseaudio-11.1
+#RUN dpkg-buildpackage -uc -b
 
 # Build xrdp
 WORKDIR /tmp
@@ -35,11 +35,11 @@ RUN sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb
 RUN sudo apt install adoptopenjdk-11-hotspot
 
 # Finaly build the drivers
-WORKDIR /tmp/xrdp/sesman/chansrv/pulse
-RUN sed -i "s/\/tmp\/pulseaudio\-10\.0/\/tmp\/pulseaudio\-11\.1/g" Makefile
-RUN make
-RUN mkdir -p /tmp/so
-RUN cp *.so /tmp/so
+#WORKDIR /tmp/xrdp/sesman/chansrv/pulse
+#RUN sed -i "s/\/tmp\/pulseaudio\-10\.0/\/tmp\/pulseaudio\-11\.1/g" Makefile
+#RUN make
+#RUN mkdir -p /tmp/so
+#RUN cp *.so /tmp/so
 
 FROM ubuntu:18.04
 ENV DEBIAN_FRONTEND noninteractive
@@ -48,7 +48,6 @@ RUN apt update && apt -y full-upgrade && apt install -y \
   less \
   locales \
   openssh-server \
-  pulseaudio \
   sudo \
   supervisor \
   uuid-runtime \
@@ -66,10 +65,9 @@ RUN apt update && apt -y full-upgrade && apt install -y \
   gradle\
   git\
   && \
-  rm -rf /var/cache/apt /var/lib/apt/lists && \
-  mkdir -p /var/lib/xrdp-pulseaudio-installer
-COPY --from=builder /tmp/so/module-xrdp-source.so /var/lib/xrdp-pulseaudio-installer
-COPY --from=builder /tmp/so/module-xrdp-sink.so /var/lib/xrdp-pulseaudio-installer
+  rm -rf /var/cache/apt /var/lib/apt/lists
+#COPY --from=builder /tmp/so/module-xrdp-source.so /var/lib/xrdp-pulseaudio-installer
+#COPY --from=builder /tmp/so/module-xrdp-sink.so /var/lib/xrdp-pulseaudio-installer
 ADD bin /usr/bin
 ADD etc /etc
 ADD autostart /etc/xdg/autostart
