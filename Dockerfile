@@ -1,4 +1,4 @@
-FROM nvidia/cuda:10.0-devel-ubuntu18.04 as builder
+FROM ubuntu:18.04 as builder
 MAINTAINER Daniel Guerra
 
 # Install packages
@@ -28,6 +28,12 @@ RUN ./bootstrap
 RUN ./configure
 RUN make
 
+# Build jdk
+WORKDIR /tmp
+RUN wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
+RUN sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
+RUN sudo apt install adoptopenjdk-11-hotspot
+
 # Finaly build the drivers
 WORKDIR /tmp/xrdp/sesman/chansrv/pulse
 RUN sed -i "s/\/tmp\/pulseaudio\-10\.0/\/tmp\/pulseaudio\-11\.1/g" Makefile
@@ -35,7 +41,7 @@ RUN make
 RUN mkdir -p /tmp/so
 RUN cp *.so /tmp/so
 
-FROM nvidia/cuda:10.0-devel-ubuntu18.04
+FROM ubuntu:18.04
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt update && apt -y full-upgrade && apt install -y \
   ca-certificates \
@@ -53,6 +59,12 @@ RUN apt update && apt -y full-upgrade && apt install -y \
   xorgxrdp \
   xprintidle \
   xrdp \
+  wget\
+  build-essential\
+  gfortran\
+  software-prperties-common\
+  gradle\
+  git\
   && \
   rm -rf /var/cache/apt /var/lib/apt/lists && \
   mkdir -p /var/lib/xrdp-pulseaudio-installer
