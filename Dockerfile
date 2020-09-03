@@ -64,6 +64,8 @@ RUN apt update && apt -y full-upgrade && apt install -y \
   software-prperties-common\
   gradle\
   git\
+  xfce4\
+  xterm\
   && \
   rm -rf /var/cache/apt /var/lib/apt/lists
 #COPY --from=builder /tmp/so/module-xrdp-source.so /var/lib/xrdp-pulseaudio-installer
