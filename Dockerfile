@@ -32,7 +32,7 @@ RUN make
 WORKDIR /tmp
 RUN wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
 RUN sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
-RUN sudo apt install adoptopenjdk-11-hotspot
+RUN sudo apt install --yes adoptopenjdk-11-hotspot
 
 # Finaly build the drivers
 #WORKDIR /tmp/xrdp/sesman/chansrv/pulse
