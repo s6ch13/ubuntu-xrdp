@@ -9,7 +9,7 @@ RUN apt-get -y update
 RUN apt-get -yy upgrade
 ENV BUILD_DEPS="git autoconf pkg-config libssl-dev libpam0g-dev \
     libx11-dev libxfixes-dev libxrandr-dev nasm xsltproc flex \
-    bison libxml2-dev dpkg-dev libcap-dev"
+    bison libxml2-dev dpkg-dev libcap-dev libtool wget"
 RUN apt-get -yy install  sudo apt-utils software-properties-common $BUILD_DEPS
 
 
@@ -32,7 +32,7 @@ RUN make
 WORKDIR /tmp
 RUN wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
 RUN sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
-RUN sudo apt install adoptopenjdk-11-hotspot
+RUN sudo apt install --yes adoptopenjdk-11-hotspot
 
 # Finaly build the drivers
 #WORKDIR /tmp/xrdp/sesman/chansrv/pulse
@@ -61,7 +61,7 @@ RUN apt update && apt -y full-upgrade && apt install -y \
   wget\
   build-essential\
   gfortran\
-  software-prperties-common\
+  software-properties-common\
   gradle\
   git\
   && \
